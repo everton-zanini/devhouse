@@ -1,5 +1,4 @@
-
-//methods: index, show, updatem store, destroy
+// methods: index, show, updatem store, destroy
 /**
  index: listagem de Sessions
  store: Criar uma Session
@@ -7,29 +6,28 @@
  destroy: Deletar uma Session
  */
 
-import User from "../models/User";
 import * as Yup from 'yup';
+import User from '../models/User';
 
 class SessionController {
-    async store(req, res) {
-        const schema = Yup.object().shape({
-            email: Yup.string().email().required()
-        });
+  async store(req, res) {
+    const schema = Yup.object().shape({
+      email: Yup.string().email().required(),
+    });
 
-        if(!(await schema.isValid(req.body))) return res.status(400).json({error: "email inválido"})
+    if (!(await schema.isValid(req.body))) return res.status(400).json({ error: 'email inválido' });
 
-        const { email } = req.body;
+    const { email } = req.body;
 
-        //Verificando se o usuário já existe
-        let user = await User.findOne({email});
+    // Verificando se o usuário já existe
+    let user = await User.findOne({ email });
 
-
-        if(!user){
-            user = await User.create({ email });
-        }
-
-        return res.json(user);
+    if (!user) {
+      user = await User.create({ email });
     }
+
+    return res.json(user);
+  }
 }
 
 export default new SessionController();
